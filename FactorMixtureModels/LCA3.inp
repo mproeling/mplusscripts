@@ -1,0 +1,26 @@
+TITLE:      LCA anxious depressed;
+DATA:       FILE IS anxdep.dat;
+VARIABLE:   
+NAMES ARE C14, C29, C30, C31, C32, C33, C35, 
+C45, C50, C52, C71, C91, C112, sex, age;
+CATEGORICAL ARE C14, C29, C30, C31, C32, C33, C35, 
+C45, C50, C52, C71, C91, C112;
+MISSING IS C14, C29, C30, C31, C32, C33, C35, 
+C45, C50, C52, C71, C91, C112 (99);
+CLASSES = c(3); 
+ANALYSIS:
+Type = Mixture; 
+MODEL:
+%OVERALL%
+
+!C14 ON sex;C29 ON sex;C30 ON sex;C31 ON sex;C32 ON sex;C33 ON sex;
+!C35 ON sex;C45 ON sex;C50 ON sex;C52 ON sex;C71 ON sex;C91 ON sex;
+!C112 ON sex;C14 ON age;C29 ON age;C30 ON age;C31 ON age;C32 ON age;
+!C33 ON age;C35 ON age;C45 ON age; C50 ON age;C52 ON age;C71 ON age;
+!C91 ON age;C112 ON age;
+
+!covariates on classes;
+C ON sex;
+C ON age;
+
+OUTPUT: TECH1 RESIDUAL TECH10 standardized;

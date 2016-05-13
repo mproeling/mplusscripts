@@ -1,0 +1,134 @@
+TITLE:      MI anxious depressed;
+DATA:       FILE IS anxinputfile.dat;
+VARIABLE:
+NAMES ARE C14, C29, C30, C31, C32, C33, C35,
+C45, C50, C52, C71, C91, C112, sex, Zage;
+USEVARIABLES ARE C14, C29, C30, C31, C32, C33, C35,
+C45, C50, C52, C71, C91, C112, Zage;
+CATEGORICAL ARE C14, C29, C30, C31, C32, C33, C35,
+C45, C50, C52, C71, C91, C112;
+MISSING IS C14, C29, C30, C31, C32, C33, C35,
+C45, C50, C52, C71, C91, C112 (99);
+GROUPING IS sex (1 = boys 2 = girls);
+ANALYSIS: PARAMETERIZATION = THETA;
+ESTIMATOR = WLSMV;
+DIFFTEST IS anx3R.dat;
+!................................................................................;
+!................................................................................;
+! STEPS
+! FIRST MODEL, Configural invariance
+!   Thresholds:
+!       Threshold 1 constrained
+!       One 1 item per latent factor constrained
+!   Factor loadings = free across groups
+!   Factor means = zero in refgroup, free in other
+!   Factor variance = fixed@1 
+!   Correlating residual = constrained
+!   Residuals = fixed@1 in refgroup, free in other;
+
+! SECOND MODEL Metric Invariance
+!   Thresholds:
+!       Threshold 1 constrained
+!       One 1 item per latent factor constrained
+!   Factor loadings = constrained
+!   Factor means = zero in refgroup, free in other
+!   Factor variance = fixed@1 in refgroup, free in other
+!   Correlating residual = constrained
+!   Residuals = fixed@1 in refgroup, free in other;
+
+! THIRD MODEL Strong factorial invariance
+!   Thresholds = constrained
+!   Factor loadings = constrained
+!   Factor means = zero in refgroup, free in other
+!   Factor variance = fixed@1 in refgroup, free in other
+!   Correlating residual = constrained
+!   Residuals = fixed@1 in refgroup, free in other;
+
+! FOURTH MODEL Strict factorial invariance
+!   Thresholds = constrained
+!   Factor loadings = constrained
+!   Factor means = zero in refgroup, free in other
+!   Factor variance = fixed@1 in refgroup, free in other
+!   Correlating residual = constrained
+!   Residuals = fixed@1 both groups
+
+! FIFTH MODEL Full invariance
+!   Thresholds = constrained
+!   Factor loadings = constrained
+!   Factor means = fixed@0 in both groups
+!   Factor variance = fixed@1 in refgroup, free in other
+!   Correlating residual = constrained
+!   Residuals = fixed@1 both groups
+!................................................................................;
+!................................................................................;
+
+MODEL: ! FIRST MODEL 
+!Factor loadings;
+F1 BY C14*1,C29*,C30*,C31*,C32*,C33*,C35*,C45*,C50*,C52*,C71*,C91*,C112*;
+
+!First Threshold;
+[C14$1*];[C29$1*];[C30$1*];[C31$1*];[C32$1*];[C33$1*];[C35$1*];[C45$1*];
+[C50$1*];[C52$1*];[C71$1*];[C91$1*];[C112$1*];
+!Second Threshold;
+[C14$2*];[C29$2*];[C30$2*];[C31$2*];[C32$2*];[C33$2*];[C35$2*];[C45$2*];
+[C50$2*];[C52$2*];[C71$2*];[C91$2*];[C112$2*];
+
+!Residual variances;
+C14@1;C29@1;C30@1;C31@1;C32@1;C33@1;C35@1;C45@1;C50@1;C52@1;C71@1;C91@1;C112@1;
+
+!Factor mean;
+[F1@0];
+!Factor variance;
+F1@1;
+
+!Correlating residuals
+C33 with C35*.1(401);
+C50 with C29*.1(402);
+C33 with C91*.1(403);
+C35 with C91*.1(404);
+
+
+!Age effects
+C14 ON Zage;
+C29 ON Zage;
+C30 ON Zage;
+C31 ON Zage;
+C32 ON Zage;
+C33 ON Zage;
+C35 ON Zage;
+C45 ON Zage;
+C50 ON Zage;
+C52 ON Zage;
+C71 ON Zage;
+C91 ON Zage;
+C112 ON Zage;
+
+!................................................................................;
+!................................................................................;
+
+MODEL girls:
+!Factor loadings;
+F1 BY C14*1;
+
+!Second Threshold 21-33;
+! C29 is the ref-item
+[C14$2];!,C30$2,C31$2,C32$2,C33$2,C35$2,C45$2,C50$2,C52$2,C71$2,C91$2,C112$2](301-312);
+
+!Residuals;
+C14*;!C29*;C30*;C31*;C32*;C33*;C35*;C45*;C50*;C52*;C71*;C91*;C112*;
+
+!Factor mean;
+[F1*0];
+!Factor variance;
+F1*1;
+
+!Correlating residuals
+C33 with C35*.1(401);
+C50 with C29*.1(402);
+C33 with C91*.1(403);
+C35 with C91*.1(404);
+
+!................................................................................;
+!................................................................................;
+SAVEDATA: DIFFTEST IS anx4R.dat;
+OUTPUT: TECH1 RESIDUAL standardized sampstat RESIDUAL MODINDICES(20);

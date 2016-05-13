@@ -1,5 +1,5 @@
 Measurement Invariance (MI) analyses on the Child Behavior CheckList (CBCL 6-18)
-Most the analyses were conducted by me under supervision of Dr vd Sluis and Dr Neale.
+Most analyses were conducted by me under supervision of Dr vd Sluis and Dr Neale.
 
 Paper was published in 2016:
 van der Sluis S, Polderman TJC, Neale MC, Verhulst FC, Posthuma D, Dieleman G. 
